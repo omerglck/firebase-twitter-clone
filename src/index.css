@@ -9,3 +9,15 @@ body {
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 }
+
+.feed {
+  display: grid;
+  grid-template-columns: 1fr minmax(400px, 600px) 1fr;
+}
+main::-webkit-scrollbar {
+  width: 8px;
+}
+main::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgb(65, 65, 65);
+}

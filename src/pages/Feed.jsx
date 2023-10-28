@@ -17,7 +17,7 @@ const Feed = () => {
     });
   }, []);
   return (
-    <div className="grid grid-cols-4 xl:grid-cols-3 h-screen bg-black overflow-hidden">
+    <div className="feed xl:grid-cols-3 h-screen bg-black overflow-hidden">
       <Nav user={user} />
       <Main user={user} />
       <Aside />

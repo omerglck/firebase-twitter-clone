@@ -1,8 +1,17 @@
+import { signOut } from "firebase/auth";
 import { navSections } from "../constants";
+import { auth } from "../firebase/config";
+import { toast } from "react-toastify";
 
 const Nav = ({ user }) => {
+  const logOut = () => {
+    signOut(auth)
+      .then(() => toast.info("çıkış yapıldı"))
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <nav className="flex flex-col justify-between items-end p-2 py-4">
+    <nav className="flex flex-col justify-between items-end p-2 py-4 ">
       <div>
         <img src="x-logo.png" className="w-14 my-4" />
         {navSections.map((i, idx) => (
@@ -24,7 +33,9 @@ const Nav = ({ user }) => {
               {user?.displayName}
             </p>
           </div>
-          <button className="bg-gray-600 p-2 rounded-lg ">Çıkış Yap</button>
+          <button className="bg-gray-600 p-2 rounded-lg " onClick={logOut}>
+            Çıkış Yap
+          </button>
         </div>
       </div>
     </nav>
