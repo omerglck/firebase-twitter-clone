@@ -15,10 +15,14 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import Dropdown from "./Dropdown";
+import { GiConfirmed } from "react-icons/gi";
+import { ImCross } from "react-icons/im";
 
 const Post = ({ tweet }) => {
   // console.log(tweet);
   const [isLiked, setIsLiked] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   // kaç gün önce atıldığını hesaplama
   const date = moment(tweet.createdAt?.toDate()).fromNow();
 
@@ -52,6 +56,16 @@ const Post = ({ tweet }) => {
     });
   };
 
+  const handleSave = (e) => {
+    e.preventDefault();
+    const tweetRef = doc(db, "tweets", tweet.id);
+
+    updateDoc(tweetRef, {
+      isEdited: true,
+      textContent: e.target[0].value,
+    });
+  };
+
   return (
     <div className="flex gap-3 p-3 border-b-[1px] border-gray-600 ">
       <img
@@ -68,17 +82,33 @@ const Post = ({ tweet }) => {
             <p className="text-gray-400">{date}</p>
           </div>
           {tweet.user.id === auth.currentUser.uid && (
-            <div
-              onClick={handleDelete}
-              className="p-2 rounded-full cursor-pointer hover:bg-gray-700"
-            >
-              <BsThreeDots />
-            </div>
+            <Dropdown
+              handleDelete={handleDelete}
+              handleEdit={() => setIsEditMode(true)}
+            />
           )}
         </div>
         {/* orta kısım > tweet içeriği*/}
         <div className="my-3">
-          <p>{tweet?.textContent}</p>
+          {isEditMode ? (
+            <form onSubmit={handleSave} className="flex">
+              <input
+                className="bg-black focus:border focus:border-gray-200"
+                type="text"
+                defaultValue={tweet.textContent}
+              />
+              <div className="flex gap-3 items-center">
+                <button type="button" onClick={() => setIsEditMode(false)}>
+                  <ImCross size={20} />
+                </button>
+                <button type="submit">
+                  <GiConfirmed size={20} />
+                </button>
+              </div>
+            </form>
+          ) : (
+            <p>{tweet?.textContent}</p>
+          )}
           {/* eğerki fotoğraf varsa*/}
           {tweet.imageContent && (
             <img
